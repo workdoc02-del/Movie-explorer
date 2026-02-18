@@ -1,0 +1,19 @@
+:root { --neon: #00f7ff; --pink: #ff007a; --glass: rgba(255, 255, 255, 0.08); --danger: #ff4d4d; }
+body { margin: 0; background: #050a0f; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--glass); }
+.navbar a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: bold; transition: 0.3s; font-size: 0.9rem; }
+.navbar a:hover { color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; padding: 40px 5%; }
+.card { background: var(--glass); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.4s; position: relative; }
+.card:hover { transform: translateY(-10px); border-color: var(--neon); box-shadow: 0 10px 30px rgba(0,247,255,0.2); }
+.card img { width: 100%; height: 320px; object-fit: cover; }
+.card-content { padding: 15px; text-align: center; }
+.btn { padding: 10px 18px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; font-size: 0.8rem; width: 100%; box-sizing: border-box; text-align: center; margin-top: 5px; }
+.primary { background: var(--neon); color: #000; }
+.pink { background: var(--pink); color: #fff; }
+.danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+.danger:hover { background: var(--danger); color: #fff; }
+.section-title { margin: 40px 5% 10px; border-left: 5px solid var(--neon); padding-left: 15px; letter-spacing: 2px; text-transform: uppercase; }
+.detail-container { display: flex; gap: 50px; padding: 50px 10%; background: rgba(255,255,255,0.02); margin: 30px 5%; border-radius: 30px; border: 1px solid var(--glass); flex-wrap: wrap; }
+.detail-img { width: 320px; border-radius: 20px; box-shadow: 0 0 40px #000; }
+input, select, textarea { background: var(--glass); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 10px; outline: none; margin-bottom: 10px; }

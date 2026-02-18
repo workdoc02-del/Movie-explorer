@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="detail-container">
+    <img src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}" class="detail-img">
+    <div class="info" style="flex:1;">
+        <h1>{{ media.title or media.name }}</h1>
+        <p style="color: var(--neon);">⭐ {{ media.vote_average|round(1) }} | {{ media.release_date or media.first_air_date }}</p>
+        <p style="line-height: 1.6; color: #ccc;">{{ media.overview }}</p>
+
+        <div style="margin: 20px 0; display:flex; gap:10px; align-items:center;">
+            <p style="margin:0; font-size: 0.8rem; color: #888;">SHARE:</p>
+            <a href="https://wa.me/?text=Recommended: {{ share_url }}" class="btn primary" style="background:#25D366; width:auto; color:white;">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?url={{ share_url }}" class="btn primary" style="background:#1DA1F2; width:auto; color:white;">X</a>
+        </div>
+
+        <div style="margin: 25px 0;">
+            <h3 style="color: var(--neon); font-size: 0.9rem;">WHERE TO WATCH</h3>
+            {% if providers and providers.flatrate %}
+            <div style="display: flex; gap: 10px;">
+                {% for p in providers.flatrate %}
+                <img src="https://image.tmdb.org/t/p/original{{ p.logo_path }}" 
+                     width="45" style="border-radius: 10px; border: 1px solid var(--glass);" 
+                     title="{{ p.provider_name }}">
+                {% endfor %}
+            </div>
+            {% elif providers and providers.buy %}
+            <p style="font-size: 0.8rem; color: #aaa;">Available for purchase/rent on Digital Stores.</p>
+            {% else %}
+            <p style="font-size: 0.8rem; color: #666;">Streaming data unavailable for this region.</p>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: rgba(0,247,255,0.05); border-radius: 12px; border: 1px solid var(--glass);">
+            <form action="/collections" method="POST" style="display: flex; gap: 10px;">
+                <input type="hidden" name="m_id" value="{{ media.id }}">
+                <input type="hidden" name="title" value="{{ media.title or media.name }}">
+                <input type="hidden" name="poster" value="{{ media.poster_path }}">
+                <input type="hidden" name="m_type" value="{{ m_type }}">
+                <input type="text" name="c_name" placeholder="Folder Name (e.g. Action Hits)" required style="margin:0; flex:1;">
+                <button class="btn primary" style="width:auto; padding: 0 20px;">+ FOLDER</button>
+            </form>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <form action="/add_watchlist" method="POST" style="flex:1;">
+                <input type="hidden" name="m_id" value="{{ media.id }}"><input type="hidden" name="title" value="{{ media.title or media.name }}"><input type="hidden" name="poster" value="{{ media.poster_path }}"><input type="hidden" name="m_type" value="{{ m_type }}">
+                <button class="btn primary">{{ '✓ WATCHLIST' if in_watchlist else '+ WATCHLIST' }}</button>
+            </form>
+            <form action="/add_favorites" method="POST" style="flex:1;">
+                <input type="hidden" name="m_id" value="{{ media.id }}"><input type="hidden" name="title" value="{{ media.title or media.name }}"><input type="hidden" name="poster" value="{{ media.poster_path }}"><input type="hidden" name="m_type" value="{{ m_type }}">
+                <button class="btn pink">{{ '❤ FAVORITE' if in_favorites else '❤ FAVORITE' }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<h2 class="section-title">🎭 TOP CAST</h2>
+<div class="grid">
+    {% for a in cast %}<div class="card" style="height:auto;"><img src="https://image.tmdb.org/t/p/w300{{ a.profile_path }}" style="height:200px; object-fit:cover;"><div class="card-content"><strong>{{ a.name }}</strong><br><small>{{ a.character }}</small></div></div>{% endfor %}
+</div>
+
+<h2 class="section-title">🔥 SIMILAR RECOMMENDATIONS</h2>
+<div class="grid">
+    {% if recommendations %}
+        {% for rec in recommendations %}
+        <div class="card">
+            <img src="https://image.tmdb.org/t/p/w500{{ rec.poster_path }}" onerror="this.src='https://via.placeholder.com/500x750'">
+            <div class="card-content">
+                <h4 style="font-size: 0.8rem; height: 35px; overflow: hidden;">{{ rec.title or rec.name }}</h4>
+                <a href="/detail/{{ m_type }}/{{ rec.id }}" class="btn primary" style="font-size: 0.7rem;">VIEW DETAILS</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="padding-left: 5%; color: #666;">No similar titles detected in the archive.</p>
+    {% endif %}
+</div>
+
+
+<h2 class="section-title">✍ USER REVIEWS</h2>
+<div style="padding:0 5%;">
+    <form action="/add_review" method="POST" style="background:var(--glass); padding:20px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);">
+        <input type="hidden" name="m_id" value="{{ media.id }}">
+        <select name="rating" style="width:auto;"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option></select><br>
+        <textarea name="review" rows="3" style="width:100%; box-sizing:border-box;" placeholder="Enter data review..." required></textarea>
+        <button class="btn primary" style="width:auto; margin-top:10px;">POST DATA</button>
+    </form>
+    {% for r in reviews %}<div style="border-bottom:1px solid var(--glass); padding:15px 0;"><strong>{{ "⭐" * r.rating }}</strong>: {{ r.review }}</div>{% endfor %}
+</div>
+{% endblock %}

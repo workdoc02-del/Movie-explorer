@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">🕒 RECENT VIEWING LOGS</h2>
+<div class="grid">
+    {% for h in history %}
+    <div class="card"><img src="https://image.tmdb.org/t/p/w500{{ h.poster }}"><div class="card-content"><h4>{{ h.title }}</h4><p style="font-size:0.75rem; color:var(--neon);">STAMP: {{ h.watched_at }}</p></div></div>
+    {% endfor %}
+</div>
+{% endblock %}
+

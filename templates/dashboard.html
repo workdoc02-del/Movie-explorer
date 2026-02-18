@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">📊 USER INSIGHTS DASHBOARD</h2>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; padding:0 5%;">
+    <div class="card" style="padding:40px; text-align:center;">
+        <h1 style="font-size:3.5rem; color:var(--neon); margin:0;">{{ stats.watched|default(0) }}</h1>
+        <p style="letter-spacing:2px;">TITLES LOGGED</p>
+    </div>
+    <div class="card" style="padding:40px; text-align:center;">
+        <h1 style="font-size:3.5rem; color:var(--pink); margin:0;">{{ stats.favs|default(0) }}</h1>
+        <p style="letter-spacing:2px;">FAVORITES STORED</p>
+    </div>
+    <div class="card" style="padding:40px; text-align:center;">
+        <h1 style="font-size:3.5rem; color:#ffcc00; margin:0;">{{ stats.reviews|default(0) }}</h1>
+        <p style="letter-spacing:2px;">DATA REVIEWS</p>
+    </div>
+</div>
+
+<div style="display: flex; gap: 30px; padding: 40px 5%; flex-wrap: wrap;">
+    <div class="card" style="flex: 1; min-width: 300px; padding: 20px;">
+        <h3 style="color: var(--neon); text-align: center;">VIEWING HABITS</h3>
+        <div style="max-width: 300px; margin: 0 auto;">
+            <canvas id="statsChart"></canvas>
+        </div>
+    </div>
+
+    <div class="card" style="flex: 1; min-width: 300px; padding: 20px;">
+        <h3 style="color: var(--neon); text-align: center;">RECENT UPLINKS</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            {% if stats.recent %}
+                {% for r in stats.recent %}
+                <div style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;">
+                    <img src="https://image.tmdb.org/t/p/w200{{ r.poster }}" width="40" style="border-radius: 5px;" onerror="this.src='https://via.placeholder.com/40x60'">
+                    <div>
+                        <p style="margin:0; font-size: 0.9rem;">{{ r.title }}</p>
+                        <small style="color: #666;">{{ r.watched_at }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center; color: #666; margin-top: 20px;">No activity logged.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    /* We move the Jinja variables into data-attributes or 
+       simple variables at the top to stop VS Code from complaining 
+       about the middle of the Chart logic.
+    */
+    document.addEventListener('DOMContentLoaded', function() {
+        // Safe variable injection
+        const watchedData = Number("{{ stats.watched|default(0) }}");
+        const favsData = Number("{{ stats.favs|default(0) }}");
+        const reviewsData = Number("{{ stats.reviews|default(0) }}");
+
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Watched', 'Favorites', 'Reviews'],
+                datasets: [{
+                    data: [watchedData, favsData, reviewsData],
+                    backgroundColor: ['#00f7ff', '#ff007a', '#ffcc00'],
+                    borderColor: '#050a0f',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: 'white' }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

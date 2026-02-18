@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">ADVANCED FILTER</h2>
+<form action="/discover" style="padding:0 5%; display:flex; gap:10px; flex-wrap:wrap;">
+    <select name="genre"><option value="28">Action</option><option value="35">Comedy</option><option value="18">Drama</option><option value="878">Sci-Fi</option></select>
+    <input type="number" name="year" placeholder="Year" style="width:120px; margin-bottom:0;">
+    <button class="btn primary" style="width:auto;">RUN QUERY</button>
+</form>
+<div class="grid">
+    {% for item in results %}<div class="card"><img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}"><div class="card-content"><h4>{{ item.title }}</h4><a href="/detail/movie/{{ item.id }}" class="btn primary">VIEW</a></div></div>{% endfor %}
+</div>
+{% endblock %}

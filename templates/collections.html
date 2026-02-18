@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">📁 CUSTOM FOLDERS</h2>
+
+<div style="padding: 0 5%;">
+    {% if collections %}
+        {% set ns = namespace(last_name="") %}
+        {% for c in collections %}
+            {% if c.collection_name != ns.last_name %}
+                {% if not loop.first %}</div>{% endif %}
+                <h3 style="color: var(--neon); margin: 40px 0 10px; border-bottom: 1px solid var(--glass); padding-bottom: 10px;">
+                    📂 {{ c.collection_name | upper }}
+                </h3>
+                <div class="grid" style="padding: 10px 0;">
+                {% set ns.last_name = c.collection_name %}
+            {% endif %}
+
+            <div class="card" style="height: auto;">
+                <img src="https://image.tmdb.org/t/p/w500{{ c.poster }}" style="height: 250px; object-fit: cover;">
+                <div class="card-content">
+                    <p style="font-size: 0.8rem; height: 35px; overflow: hidden; margin-bottom: 10px;">{{ c.title }}</p>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <a href="/detail/{{ c.media_type }}/{{ c.media_id }}" class="btn primary" style="font-size: 0.7rem;">OPEN MOVIE</a>
+                        <a href="/remove_collection/{{ c.id }}" class="btn danger" style="font-size: 0.7rem;">REMOVE</a>
+                    </div>
+                </div>
+            </div>
+
+            {% if loop.last %}</div>{% endif %}
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 100px 0;">
+            <p style="color: #666; font-style: italic;">No custom folders detected in the archive.</p>
+            <a href="/" class="btn primary" style="width: auto; margin-top: 20px;">START COLLECTING</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

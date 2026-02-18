@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="text-align: center; padding: 80px 0;">
+    <h1 style="font-size: 3.5rem; margin:0; text-shadow: 0 0 15px var(--neon);">THE NEXT ERA OF CINEMA</h1>
+    <form method="POST" style="margin-top:20px; display:flex; justify-content:center; gap:10px;">
+        <input type="text" name="query" placeholder="Search the mainframe..." style="width:400px; border-radius:30px; padding-left:20px;">
+        <button class="btn primary" style="width:auto; padding:0 30px;">SEARCH</button>
+    </form>
+</div>
+<h2 class="section-title">{% if results %}SEARCH RESULTS{% else %}🔥 TRENDING DATA{% endif %}</h2>
+<div class="grid">
+    {% for item in (results if results else trending) %}
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" onerror="this.src='https://via.placeholder.com/500x750'">
+        <div class="card-content">
+            <h4 style="margin:0 0 10px 0; height:40px; overflow:hidden;">{{ item.title or item.name }}</h4>
+            <a href="/detail/{{ item.media_type or 'movie' }}/{{ item.id }}" class="btn primary">VIEW UPLINK</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

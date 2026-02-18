@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NEONFLIX EXPLORER</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h2 style="color:var(--neon); margin:0; cursor:pointer;" onclick="location.href='/'">NEONFLIX</h2>
+        <div>
+            <a href="/">HOME</a>
+            <a href="/discover">DISCOVER</a>
+            <a href="/watchlist">WATCHLIST</a>
+            <a href="/favorites">FAVORITES</a>
+            <a href="/history">HISTORY</a>
+            <a href="/dashboard">STATS</a>
+            <a href="/collections">COLLECTIONS</a>
+        </div>
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+</html>

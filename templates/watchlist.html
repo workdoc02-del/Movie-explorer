@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">📡 SECURE UPLINK: WATCHLIST</h2>
+<div class="grid">
+    {% for m in movies %}
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500{{ m.poster }}">
+        <div class="card-content">
+            <h4 style="margin:0 0 10px 0; height:40px; overflow:hidden;">{{ m.title }}</h4>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <a href="/detail/{{ m.media_type }}/{{ m.media_id }}" class="btn primary">VIEW DETAILS</a>
+                <a href="/remove_watchlist/{{ m.media_id }}" class="btn danger">DELETE FROM UPLINK</a>
+            </div>
+        </div>
+    </div>
+    {% else %}<p style="padding:0 5%;">No movies currently tracked.</p>{% endfor %}
+</div>
+{% endblock %}
